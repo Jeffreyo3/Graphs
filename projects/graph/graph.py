@@ -42,9 +42,9 @@ class Graph:
         """
         # make a queue
         q = Queue()
-        # initialize with first node
+        # initialize with first vertex
         q.enqueue(starting_vertex)
-        # make a set to track visited nodes
+        # make a set to track visited vertex
         visited = set()
 
         while q.size() > 0:
@@ -62,7 +62,22 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # make a stack of vertex to visit
+        s = Stack()
+        # initialize with first vertex
+        s.push(starting_vertex)
+        # make a set to track visited vertex
+        visited = set()
+
+        while s.size() > 0:
+            curr_vertex = s.pop()
+
+            if curr_vertex not in visited:
+                print(curr_vertex)
+                visited.add(curr_vertex)
+                neighbors = self.get_neighbors(curr_vertex)
+                for neighbor in neighbors:
+                    s.push(neighbor)
 
     def dft_recursive(self, starting_vertex):
         """
