@@ -101,7 +101,38 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        q = Queue()
+
+        visited = set()
+        path = []
+
+        vertices = self.vertices
+
+        q.enqueue(starting_vertex)
+
+        while q.size() > 0:
+            item = q.dequeue()
+
+            visited.add(item)
+            path.append(item)
+
+            if item == destination_vertex:
+                return path
+
+            for vertex in vertices[item]:
+                if vertex not in visited:
+                    neighbors = self.get_neighbors(vertex)
+
+                    if destination_vertex in neighbors:
+                        path.append(vertex)
+                        path.append(destination_vertex)
+                        return path
+                    
+                    q.enqueue(vertex)
+        
+        return "Error: No valid path"
+
+
 
     def dfs(self, starting_vertex, destination_vertex):
         """
