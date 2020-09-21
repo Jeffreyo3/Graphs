@@ -111,15 +111,15 @@ class Graph:
         q.enqueue(starting_vertex)
 
         while q.size() > 0:
-            item = q.dequeue()
+            curr_vertex = q.dequeue()
 
-            visited.add(item)
-            path.append(item)
+            visited.add(curr_vertex)
+            path.append(curr_vertex)
 
-            if item == destination_vertex:
+            if curr_vertex == destination_vertex:
                 return path
 
-            for vertex in vertices[item]:
+            for vertex in vertices[curr_vertex]:
                 if vertex not in visited:
                     neighbors = self.get_neighbors(vertex)
 
@@ -140,7 +140,43 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+        s.push(starting_vertex)
+
+        visited = set()
+
+        vertices = self.vertices
+        print(vertices)
+        path = [starting_vertex]
+
+        while s.size() > 0:
+            # remove from stack
+            curr_vertex = s.pop()
+            # print(curr_vertex)
+            # end function & return path if current is destination
+            if curr_vertex == destination_vertex:
+                visited.add(curr_vertex)
+                path.append(curr_vertex)
+                return path
+
+            # if we haven't visited current yet, do stuff
+            if curr_vertex not in visited:
+                # add to visited set
+                visited.add(curr_vertex)
+
+                # go through keys in verticies and 
+                for vertex in vertices[curr_vertex]:
+                    s.push(vertex)
+
+                    if vertex not in visited:
+                        neighbors = self.get_neighbors(vertex)
+                        if destination_vertex in neighbors:
+                            path.append(curr_vertex)
+                            path.append(vertex)
+                            path.append(destination_vertex)
+                            
+                            return path
+        return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
