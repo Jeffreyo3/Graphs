@@ -25,7 +25,6 @@ class Graph:
             self.vertices[v1].add(v2)
         else:
             print("Error: Vertex does not exist")
-            return None
 
     def get_neighbors(self, vertex_id):
         """
@@ -35,6 +34,7 @@ class Graph:
             return self.vertices[vertex_id]
         else:
             print("Error: Vertext does not exist")
+            return None
 
 
     def bft(self, starting_vertex):
