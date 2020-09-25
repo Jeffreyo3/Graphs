@@ -1,5 +1,6 @@
 import random
 import math
+from util import Queue  # These may come in handy
 
 class User:
     def __init__(self, name):
@@ -62,12 +63,12 @@ class SocialGraph:
             self.add_user(i)
 
         # Create friendships
+
         for i in range(1, num_users+1):
             if added_count < total_friendships:
                 # on odd num users, calculate randomly how many friends they should get
                 if i%2 != 0:
                     add_friends = random.randint(0, i-1)
-                    
                     while add_friends > 0:
                         if added_count >= total_friendships:
                             add_friends = 0
@@ -85,7 +86,6 @@ class SocialGraph:
                     
                     if to_add > i:
                         to_add = i
-
                     while to_add > 0:
                         if added_count >= total_friendships:
                             to_add = 0
@@ -96,7 +96,7 @@ class SocialGraph:
                                 self.add_friendship(i, random_friend)
                                 to_add -= 1
                                 added_count += 2
-
+        
         # while added_count < total_friendships:
         #     for i in range(num_users):
         #         # self.add_user(i+1)
@@ -115,27 +115,55 @@ class SocialGraph:
         #                 self.add_friendship(i+1, j)
         #                 count += 1
         #                 added_count += 1
-        # print(total_friendships, added_count)
+        print(total_friendships, added_count)
     
         
 
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
-
+​
         Returns a dictionary containing every user in that user's
         extended network with the shortest friendship path between them.
-
+​
         The key is the friend's ID and the value is the path.
+​
+        BFT
+        
+        Shortest path --> breadth first
+        Recursion --> depth first
+​
         """
+        q = Queue()
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+
+        q.enqueue([user_id])
+
+        while q.size() > 0:
+            current_path = q.dequeue()
+            current_user = current_path[-1]
+
+            if current_user not in visited:
+                visited[current_user] = current_path
+
+                friends = self.friendships[current_user]
+
+                for friend in friends:
+                    path_copy = list(current_path)
+                    path_copy.append(friend)
+                    q.enqueue(path_copy)
+
         return visited
 
 
+from timeit import default_timer as timer
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    start = timer()
+    sg.populate_graph(100, 5)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+    elapsed_time = timer() - start # in seconds
+    print("Elapsed Time: ", elapsed_time)
+    print("\n")
